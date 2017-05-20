@@ -48,7 +48,7 @@ class Item(Resource):
 
 	def delete(self, name):
 		# This list(filter(lambda)) will find all of the items that DON'T match the supplied name and over write the list
-		# without the named item. items is the var name and its also being passed into the filter, will cause error.
+		# without the deleted item. We need to use a global variable here to prevent errors.
 		global items
 		items = list(filter(lambda x: x['name'] != name, items))
 		return {'message': 'Item deleted'}
