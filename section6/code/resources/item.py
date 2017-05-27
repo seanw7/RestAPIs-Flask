@@ -9,6 +9,11 @@ class Item(Resource):
 						required=True,
 						help="This field cannot be left blank!")
 
+	parser.add_argument('store_id',
+						type=float,
+						required=True,
+						help="Every item needs a store id")
+
 	@jwt_required()
 	def get(self, name):
 		item = ItemModel.find_by_name(name)
@@ -22,7 +27,7 @@ class Item(Resource):
 
 		# Makes sure the item json the user sends to us has a price field.
 		data = Item.parser.parse_args()
-		item = ItemModel(name, data['price'])
+		item = ItemModel(name, data['price'], data['store_id'])
 		# Try and insert the POST data into the database.
 		try:
 			item.save_to_db()
@@ -36,7 +41,7 @@ class Item(Resource):
 		item = ItemModel.find_by_name(name)
 
 		if item is None:
-			item = ItemModel(name, data['price'])
+			item = ItemModel(name, data['price'], data['store_id'])
 		else:
 			item.price = data['price']
 		item.save_to_db()
